@@ -1,0 +1,98 @@
+.mainBlock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-width: 300px;
+    min-height: 300px;
+    width: 20%;
+    border: 0px #ffffff solid;
+    border-radius: 15px;
+    background-color: rgb(173, 231, 248);
+    box-shadow: 0 0 20px rgb(194, 235, 248);
+}
+
+.inputs {
+    position: absolute;
+    height: 85%;
+    width: 90%;
+    top: 15%;
+    left: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.loginForm {
+    height: 75%;
+    width: 100%;
+    left: 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+.loginInput {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    height: 20%;
+    border-radius: 10px;
+    border: 0;
+}
+
+.passwordInput {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    height: 20%;
+    border-radius: 10px;
+    border: 0;
+}
+
+.loginButton {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    height: 20%;
+    background-color: rgb(41, 115, 199, 0.80);
+    color: #ffffff;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    transition: 0.5s;
+}
+.loginButton:hover {
+    background-color: rgba(255, 255, 255, 0);
+    color: rgb(41, 115, 199, 0.80);
+    border: rgb(41, 115, 199, 0.80) 1px solid;
+    transition: 0.5s;
+}
+
+.registerButton {
+    margin-bottom: 5%;
+    height: 15%;
+    background-color: rgba(255, 255, 255, 0);
+    color: rgb(41, 115, 199, 0.80);
+    border-radius: 10px;
+    border: rgb(41, 115, 199, 0.80) 1px solid;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.registerButton:hover {
+    background-color: rgba(41, 199, 125, 0.8);
+    border: rgba(255, 255, 255, 0.8) 1px solid;
+    color: #ffffff;
+    transition: 0.5s;
+}
+
+.title {
+    position: absolute;
+    text-align: center;
+    text-shadow: #ffffff;
+    font-size: 24px;
+    height: 5%;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+}

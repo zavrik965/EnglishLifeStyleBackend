@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block headSettings %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='login.css')}}">
+{% endblock %}
+
+{% block main %}
+<div class="mainBlock">
+    <div class="title">Вход</div>
+    <div class="inputs">
+        <form class="loginForm" method="POST", action="/admin/login">
+            <input id="login" name="login" class="loginInput">
+            <input id="password" name="password" type="password" class="passwordInput">
+            <input id="loginButton" class="loginButton" type="submit" value="Войти">
+        </form>
+        <input id="registerButton" class="registerButton" type="submit" value="Зарегистрироваться">
+    </div>
+</div>
+<script src="{{ url_for('.static', filename='login.js')}}"></script>
+{% endblock %}
