@@ -1,4 +1,4 @@
-#!/home/alexander/Projects/Alexavr.ru/myblog/venv/bin/python3
+#!/home/alexander/Документы/Projects/Alexavr/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
