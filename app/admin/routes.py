@@ -9,6 +9,7 @@ from app.models.price import Price
 from app.models.user import User
 from flask_jwt_extended import create_access_token, unset_jwt_cookies, jwt_required
 import hashlib
+import json
 
 @bp.route("/")
 def index():
@@ -28,30 +29,22 @@ def login():
     unset_jwt_cookies(response)
     return response, 401
 
-@bp.route("/add_review", methods=["POST"])
+@bp.route("/update_reviews", methods=["POST"])
 @jwt_required()
-def add_review():
-    raw_review = request.json
-    review = Review(author=raw_review.get("author"), content=raw_review.get("content"))
-    db.session.add(review)
-    db.session.commit()
-    return jsonify({"status": "OK"}), 200
-
-@bp.route("/change_review", methods=["POST"])
-@jwt_required()
-def change_review():
-    raw_review = request.json
-    review = Review.query.filter(Review.id == raw_review.get("id"))
-    review.author = raw_review.get("author")
-    review.content = raw_review.get("content")
-    db.session.commit()
-    return jsonify({"status": "OK"}), 200
-
-@bp.route("/remove_review", methods=["POST"])
-@jwt_required()
-def remove_review():
-    raw_review = request.json
-    review = Review.query.filter(Review.id == raw_review.get("id")).delete()
+def update_reviews():
+    raw_reviews = request.json
+    old_reviews = Review.query.all()
+    new_list_reviews = []
+    for raw_review in raw_reviews:
+        if raw_review.get("id") == -1:
+            review = Review(author=raw_review.get("author"), content=raw_review.get("content"))
+            db.session.add(review)
+            new_list_reviews.append(review.id)
+        else:
+            new_list_reviews.append(raw_review.get("id"))
+    for review in old_reviews:
+        if review.id not in new_list_reviews:
+            Review.query.filter(Review.id == review.id).delete()
     db.session.commit()
     return jsonify({"status": "OK"}), 200
 
@@ -64,21 +57,41 @@ def set_video():
     db.session.commit()
     return jsonify(video)
 
-@bp.route("/add_to_top_slider", methods=["POST"])
+@bp.route("/update_top_slider", methods=["POST"])
 @jwt_required()
-def add_to_top_slider():
+def update_top_slider():
     raw_slider = request.json
-    slider = TopSlider(image_url=f'http://192.168.168.71:5000/api/image/{raw_slider.get("image_url")}', content=raw_slider.get("content"))
-    db.session.add(slider)
+    old_slider = TopSlider.query.all()
+    new_list_slider = []
+    for raw_slider_item in raw_slider:
+        if raw_slider_item.get("id") == -1:
+            slider = TopSlider(image_url=raw_slider_item.get("image_url"), content=raw_slider_item.get("content"))
+            db.session.add(slider)
+            new_list_slider.append(slider.id)
+        else:
+            new_list_slider.append(raw_slider_item.get("id"))
+    for slider in old_slider:
+        if slider.id not in new_list_slider:
+            TopSlider.query.filter(TopSlider.id == slider.id).delete()
     db.session.commit()
     return jsonify({"status": "OK"}), 200
 
-@bp.route("/add_to_bottom_slider", methods=["POST"])
+@bp.route("/update_bottom_slider", methods=["POST"])
 @jwt_required()
-def add_to_bottom_slider():
+def update_bottom_slider():
     raw_slider = request.json
-    slider = BottomSlider(image_url=f'http://192.168.168.71:5000/api/image/{raw_slider.get("image_url")}', content=raw_slider.get("content"))
-    db.session.add(slider)
+    old_slider = BottomSlider.query.all()
+    new_list_slider = []
+    for raw_slider_item in raw_slider:
+        if raw_slider_item.get("id") == -1:
+            slider = BottomSlider(image_url=raw_slider_item.get("image_url"), content=raw_slider_item.get("content"))
+            db.session.add(slider)
+            new_list_slider.append(slider.id)
+        else:
+            new_list_slider.append(raw_slider_item.get("id"))
+    for slider in old_slider:
+        if slider.id not in new_list_slider:
+            BottomSlider.query.filter(BottomSlider.id == slider.id).delete()
     db.session.commit()
     return jsonify({"status": "OK"}), 200
 
@@ -87,4 +100,25 @@ def add_to_bottom_slider():
 def add_image():
     img = request.files['file']
     image_url = request.form["image_url"]
-    img.save(f"app/static/image/{image_url}")
+    img.save(f"app/static/images/{image_url}")
+    return jsonify({"status": "OK"}), 200
+
+@bp.route("/update_price_lists", methods=["POST"])
+@jwt_required()
+def update_price_lists():
+    raw_price_lists = request.json
+    old_prices = Price.query.all()
+    new_list_prices = []
+    for price_type, raw_price_list in enumerate(raw_price_lists):
+        for raw_price in raw_price_list:
+            if raw_price.get("id") == -1:
+                price = Price(points=json.dumps(raw_price.get("points")), value=raw_price.get("value"), old_value=raw_price.get("old_value"), price_type=price_type)
+                db.session.add(price)
+                new_list_prices.append(price.id)
+            else:
+                new_list_prices.append(raw_price.get("id"))
+    for price in old_prices:
+        if price.id not in new_list_prices:
+            Price.query.filter(Price.id == price.id).delete()
+    db.session.commit()
+    return jsonify({"status": "OK"}), 200
